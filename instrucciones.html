@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Espacial: Crafting de Potencias</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space: #01020a;
+            --deep: #060d1f;
+            --panel: #0a1628;
+            --border: #1a3a6e;
+            --neon-blue: #00d4ff;
+            --neon-green: #39ff14;
+            --neon-red: #ff2244;
+            --neon-yellow: #ffe600;
+            --neon-purple: #bf00ff;
+            --redstone: #ff3300;
+            --gold: #FFD700;
+            --pixel: 4px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--space);
+            color: #c8e0ff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* STARS BACKGROUND */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, white, transparent),
+                radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,.7), transparent),
+                radial-gradient(1.5px 1.5px at 40% 10%, white, transparent),
+                radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,.8), transparent),
+                radial-gradient(1px 1px at 70% 25%, white, transparent),
+                radial-gradient(1.5px 1.5px at 80% 75%, rgba(255,255,255,.6), transparent),
+                radial-gradient(1px 1px at 90% 45%, white, transparent),
+                radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,.7), transparent),
+                radial-gradient(1px 1px at 35% 90%, white, transparent),
+                radial-gradient(1.5px 1.5px at 60% 85%, rgba(255,255,255,.5), transparent),
+                radial-gradient(1px 1px at 5% 55%, white, transparent),
+                radial-gradient(1px 1px at 95% 10%, rgba(255,255,255,.8), transparent),
+                radial-gradient(1px 1px at 48% 35%, white, transparent),
+                radial-gradient(1px 1px at 72% 90%, rgba(255,255,255,.6), transparent),
+                radial-gradient(1px 1px at 88% 60%, white, transparent);
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* PIXEL BORDER UTILITY */
+        .pixel-box {
+            border: var(--pixel) solid var(--border);
+            box-shadow:
+                0 0 0 var(--pixel) var(--deep),
+                0 0 0 calc(var(--pixel)*2) var(--border),
+                0 0 30px rgba(0,212,255,.15),
+                inset 0 0 30px rgba(0,0,0,.5);
+            background: var(--panel);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        /* HERO HEADER */
+        .hero {
+            text-align: center;
+            padding: 50px 30px 40px;
+            margin-bottom: 30px;
+            background:
+                linear-gradient(180deg, rgba(0,50,100,.9) 0%, rgba(6,13,31,.95) 100%);
+            border: var(--pixel) solid var(--neon-blue);
+            box-shadow:
+                0 0 0 calc(var(--pixel)*2) var(--deep),
+                0 0 60px rgba(0,212,255,.3),
+                0 0 120px rgba(0,212,255,.1);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0,212,255,.03) 32px),
+                repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(0,212,255,.03) 32px);
+            pointer-events: none;
+        }
+
+        .planet {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 15px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0,212,255,.6));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+
+        .hero-tag {
+            font-family: 'Press Start 2P', cursive;
+            font-size: .55rem;
+            color: var(--neon-green);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .hero h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.35rem;
+            color: var(--neon-blue);
+            text-shadow:
+                0 0 10px var(--neon-blue),
+                0 0 30px rgba(0,212,255,.5);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 span {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .hero-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            color: #8ab4d4;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* ALERT BANNER */
+        .alert-bar {
+            background: linear-gradient(90deg, #1a0000, #3d0000, #1a0000);
+            border: var(--pixel) solid var(--redstone);
+            box-shadow: 0 0 20px rgba(255,51,0,.4);
+            padding: 15px 25px;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: .6rem;
+            color: var(--redstone);
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            animation: alarm 2s ease-in-out infinite;
+        }
+
+        @keyframes alarm {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,51,0,.4); }
+            50% { box-shadow: 0 0 40px rgba(255,51,0,.8), 0 0 80px rgba(255,51,0,.3); }
+        }
+
+        /* SECTION CARDS */
+        .section {
+            margin-bottom: 25px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: .75rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 1px;
+        }
+
+        .section-title .icon { font-size: 1.4rem; }
+
+        .section-title .line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, currentColor, transparent);
+            opacity: .4;
+        }
+
+        /* COLORS POR SECCIÓN */
+        .blue .section-title { color: var(--neon-blue); }
+        .green .section-title { color: var(--neon-green); }
+        .yellow .section-title { color: var(--neon-yellow); }
+        .purple .section-title { color: var(--neon-purple); }
+        .red-s .section-title { color: var(--redstone); }
+
+        .blue { border-color: var(--neon-blue); box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--neon-blue), 0 0 25px rgba(0,212,255,.15); }
+        .green { border-color: var(--neon-green); box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--neon-green), 0 0 25px rgba(57,255,20,.1); }
+        .yellow { border-color: var(--neon-yellow); box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--neon-yellow), 0 0 25px rgba(255,230,0,.1); }
+        .purple { border-color: var(--neon-purple); box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--neon-purple), 0 0 25px rgba(191,0,255,.1); }
+        .red-s { border-color: var(--redstone); box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--redstone), 0 0 25px rgba(255,51,0,.1); }
+
+        /* STORY TEXT */
+        .story {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #a8c8e8;
+        }
+
+        .story strong { color: var(--neon-blue); }
+        .story .highlight { color: var(--neon-yellow); font-weight: 700; }
+        .story .danger { color: var(--redstone); font-weight: 700; }
+
+        /* HEARTS */
+        .hearts {
+            display: inline-flex;
+            gap: 5px;
+            font-size: 1.4rem;
+            vertical-align: middle;
+        }
+
+        /* SKILL BLOCKS */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .skill-block {
+            background: rgba(0,0,0,.4);
+            border: 2px solid rgba(0,212,255,.2);
+            border-radius: 4px;
+            padding: 20px;
+            transition: all .3s;
+        }
+
+        .skill-block:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0,212,255,.2);
+            transform: translateY(-3px);
+        }
+
+        .skill-block .skill-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .skill-block h4 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: .6rem;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .skill-block p {
+            font-size: 1rem;
+            color: #8ab4d4;
+            line-height: 1.6;
+        }
+
+        .skill-block .formula {
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            color: var(--neon-yellow);
+            background: rgba(255,230,0,.08);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: block;
+            border-left: 3px solid var(--neon-yellow);
+        }
+
+        /* FORMULA TABLE */
+        .formula-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+        }
+
+        .formula-table th {
+            background: rgba(0,212,255,.1);
+            color: var(--neon-blue);
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid rgba(0,212,255,.2);
+            font-family: 'Press Start 2P', cursive;
+            font-size: .55rem;
+            letter-spacing: 1px;
+        }
+
+        .formula-table td {
+            padding: 12px 15px;
+            border: 1px solid rgba(255,255,255,.05);
+            text-align: center;
+            color: #c8e0ff;
+        }
+
+        .formula-table tr:hover td {
+            background: rgba(0,212,255,.05);
+        }
+
+        .tag-b { color: var(--neon-green); }
+        .tag-e { color: var(--neon-purple); }
+        .tag-p { color: var(--neon-yellow); }
+
+        /* STEPS */
+        .steps-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps-list li {
+            counter-increment: step;
+            position: relative;
+            padding: 18px 20px 18px 65px;
+            margin-bottom: 12px;
+            background: rgba(0,0,0,.3);
+            border: 1px solid rgba(255,255,255,.06);
+            border-radius: 4px;
+            color: #a8c8e8;
+            line-height: 1.7;
+            transition: all .3s;
+        }
+
+        .steps-list li:hover {
+            border-color: rgba(57,255,20,.3);
+            background: rgba(57,255,20,.04);
+        }
+
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--neon-green), #00aa00);
+            color: #000;
+            font-family: 'Press Start 2P', cursive;
+            font-size: .7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(57,255,20,.4);
+            flex-shrink: 0;
+        }
+
+        .steps-list li strong { color: var(--neon-green); }
+
+        /* TIPS */
+        .tips-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .tip {
+            background: rgba(0,0,0,.4);
+            border-left: 4px solid var(--neon-yellow);
+            padding: 18px 20px;
+            border-radius: 0 4px 4px 0;
+            color: #a8c8e8;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .tip strong { color: var(--neon-yellow); }
+
+        /* SOUND TIP */
+        .sound-tip {
+            background: rgba(191,0,255,.08);
+            border: 1px solid rgba(191,0,255,.3);
+            border-radius: 4px;
+            padding: 18px 20px;
+            color: #c8a8e8;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .sound-tip .icon { font-size: 1.5rem; flex-shrink: 0; }
+        .sound-tip strong { color: var(--neon-purple); }
+
+        /* CTA BUTTON */
+        .cta-section {
+            text-align: center;
+            padding: 40px 30px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(0,212,255,.08), rgba(57,255,20,.08));
+            border: var(--pixel) solid var(--neon-green);
+            box-shadow: 0 0 0 var(--pixel) var(--deep), 0 0 0 calc(var(--pixel)*2) var(--neon-green), 0 0 50px rgba(57,255,20,.15);
+            border-radius: 4px;
+        }
+
+        .cta-section h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: .9rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00aa00, #007700);
+            color: #000;
+            font-family: 'Press Start 2P', cursive;
+            font-size: .8rem;
+            padding: 18px 35px;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 3px solid var(--neon-green);
+            box-shadow:
+                0 0 20px rgba(57,255,20,.5),
+                inset 0 2px 0 rgba(255,255,255,.2);
+            transition: all .3s;
+            cursor: pointer;
+            letter-spacing: 1px;
+            animation: glow-btn 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-btn {
+            0%, 100% { box-shadow: 0 0 20px rgba(57,255,20,.5), inset 0 2px 0 rgba(255,255,255,.2); }
+            50% { box-shadow: 0 0 40px rgba(57,255,20,.9), 0 0 80px rgba(57,255,20,.3), inset 0 2px 0 rgba(255,255,255,.2); }
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: linear-gradient(135deg, var(--neon-green), #00cc00);
+        }
+
+        .cta-note {
+            margin-top: 18px;
+            font-size: 1rem;
+            color: #6a8aaa;
+        }
+
+        /* REDSTONE BAR */
+        .redstone-bar {
+            height: 20px;
+            background: rgba(0,0,0,.5);
+            border: 2px solid rgba(255,51,0,.4);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .redstone-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--redstone), #ff6600);
+            box-shadow: 0 0 10px rgba(255,51,0,.6);
+            animation: fill-bar 3s ease-out forwards;
+            animation-delay: .5s;
+        }
+
+        @keyframes fill-bar { to { width: 100%; } }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 2px solid rgba(0,212,255,.15);
+            color: #4a6a8a;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .footer strong { color: var(--neon-blue); }
+        .footer .pixel-sig {
+            font-family: 'Press Start 2P', cursive;
+            font-size: .55rem;
+            color: var(--neon-green);
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 650px) {
+            .hero h1 { font-size: .9rem; }
+            .hero-sub { font-size: 1rem; }
+            .skill-grid { grid-template-columns: 1fr; }
+            .section { padding: 22px 18px; }
+            .planet { font-size: 3.5rem; }
+            .section-title { font-size: .6rem; }
+            .cta-btn { font-size: .6rem; padding: 15px 22px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+        <span class="planet">🚀</span>
+        <span class="hero-tag">▶ Simulador de Entrenamiento Activo</span>
+        <h1>MINECRAFT ESPACIAL:<br><span>CRAFTING DE POTENCIAS</span></h1>
+        <p class="hero-sub">
+            ¡Bienvenidos a bordo, Astronautas Matemáticos! 🌌
+            Una aventura intergaláctica donde tu conocimiento matemático
+            es la única llave para salvar tu nave espacial.
+        </p>
+    </div>
+
+    <!-- ALERTA -->
+    <div class="alert-bar">
+        ⚠ &nbsp; REACTOR INESTABLE — SE REQUIERE TRIPULACIÓN MATEMÁTICA INMEDIATA &nbsp; ⚠
+    </div>
+
+    <!-- MISIÓN -->
+    <div class="pixel-box section blue">
+        <div class="section-title">
+            <span class="icon">👾</span>
+            ¿DE QUÉ TRATA LA MISIÓN?
+            <span class="line"></span>
+        </div>
+        <p class="story">
+            Tu nave espacial se ha quedado sin energía cerca de un
+            <strong>misterioso planeta cúbico</strong>. Para volver a casa,
+            necesitas recolectar <span class="highlight">10 Núcleos de Energía de Redstone Estelar</span>.
+        </p>
+        <br>
+        <div class="redstone-bar"><div class="redstone-fill"></div></div>
+        <p style="font-family: 'VT323', monospace; font-size: 1.2rem; color: #ff6633; text-align:center; margin-bottom: 15px;">
+            REDSTONE ESTELAR: 10/10 NÚCLEOS NECESARIOS
+        </p>
+        <p class="story">
+            La única forma de "craftear" esta energía es resolviendo los desafíos del reactor de la nave,
+            que opera usando las <strong>leyes de la potenciación</strong>.
+        </p>
+        <br>
+        <p class="story">
+            <span class="danger">⚠ ¡Pero cuidado!</span> El reactor es inestable.
+            Tienes <span class="hearts">💖💖💖</span> <span class="danger">3 corazones de vida</span>.
+            Si fallas una respuesta perderás energía.
+            ¡Evita que lleguen a cero o quedarás varado en el espacio exterior!
+        </p>
+    </div>
+
+    <!-- HABILIDADES -->
+    <div class="pixel-box section yellow">
+        <div class="section-title">
+            <span class="icon">🛠️</span>
+            ¿QUÉ VAS A PRACTICAR?
+            <span class="line"></span>
+        </div>
+        <div class="skill-grid">
+            <div class="skill-block">
+                <span class="skill-icon">🔬</span>
+                <h4>COMPONENTES DE UNA POTENCIA</h4>
+                <p>Identifica de forma instantánea las partes de una potencia:</p>
+                <span class="formula">b<sup>e</sup> = p</span>
+                <br>
+                <div style="font-size: .95rem; color: #8ab4d4; margin-top: 10px; line-height: 1.7;">
+                    <span class="tag-b">● Base (b):</span> El número que se multiplica<br>
+                    <span class="tag-e">● Exponente (e):</span> Cuántas veces<br>
+                    <span class="tag-p">● Potencia (p):</span> El resultado final
+                </div>
+            </div>
+            <div class="skill-block">
+                <span class="skill-icon">⚡</span>
+                <h4>CÁLCULO DIRECTO</h4>
+                <p>Resuelve potencias clásicas de forma mental y veloz:</p>
+                <span class="formula">2³ = 8 &nbsp;&nbsp; 5² = 25</span>
+                <p style="margin-top: 10px; color: #8ab4d4;">¡Velocidad y precisión son clave!</p>
+            </div>
+            <div class="skill-block">
+                <span class="skill-icon">🔍</span>
+                <h4>DESCIFRAR LA INCÓGNITA</h4>
+                <p>Encuentra bases o exponentes perdidos con operaciones inversas:</p>
+                <span class="formula">x³ = 27 &nbsp; → &nbsp; x = ?</span>
+                <span class="formula">5ˣ = 25 &nbsp; → &nbsp; x = ?</span>
+            </div>
+        </div>
+
+        <br>
+        <p style="font-family: 'Press Start 2P', cursive; font-size: .6rem; color: var(--neon-yellow); margin-bottom: 12px;">
+            📊 TABLA DE REFERENCIA DE POTENCIAS
+        </p>
+        <table class="formula-table">
+            <thead>
+                <tr>
+                    <th>EXPRESIÓN</th>
+                    <th>BASE</th>
+                    <th>EXPONENTE</th>
+                    <th>RESULTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2³</td>
+                    <td class="tag-b">2</td>
+                    <td class="tag-e">3</td>
+                    <td class="tag-p">8</td>
+                </tr>
+                <tr>
+                    <td>3⁴</td>
+                    <td class="tag-b">3</td>
+                    <td class="tag-e">4</td>
+                    <td class="tag-p">81</td>
+                </tr>
+                <tr>
+                    <td>5²</td>
+                    <td class="tag-b">5</td>
+                    <td class="tag-e">2</td>
+                    <td class="tag-p">25</td>
+                </tr>
+                <tr>
+                    <td>10³</td>
+                    <td class="tag-b">10</td>
+                    <td class="tag-e">3</td>
+                    <td class="tag-p">1.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- INSTRUCCIONES DE JUEGO -->
+    <div class="pixel-box section green">
+        <div class="section-title">
+            <span class="icon">🎮</span>
+            INSTRUCCIONES DE JUEGO
+            <span class="line"></span>
+        </div>
+        <ol class="steps-list">
+            <li>
+                <strong>Elige tu Avatar:</strong> Selecciona a tu tripulante espacial favorito:
+                Steve Astronauta 👨‍🚀, Alex Exploradora 👩‍🚀 o el misterioso Ender-Bot 🤖
+            </li>
+            <li>
+                <strong>Ingresa tu Nick de Juego:</strong> Escribe tu nombre para registrar
+                tu Hoja de Inventario al final de la misión.
+            </li>
+            <li>
+                <strong>Analiza el Reactor:</strong> Lee con atención la pregunta y observa
+                la fórmula matemática en pantalla. ¡No te apresures!
+            </li>
+            <li>
+                <strong>Craftea tu Respuesta:</strong> Selecciona uno de los
+                <strong>4 botones de bloque de Minecraft</strong> con la respuesta correcta.
+            </li>
+            <li>
+                <strong>Monitorea tu Combustible:</strong> Observa cómo sube tu barra de Redstone
+                con cada acierto hasta llegar al <strong>100%</strong> (10 aciertos).
+            </li>
+            <li>
+                <strong>¡Revisa tu Hoja de Inventario!</strong> Al finalizar verás tus estadísticas
+                detalladas de <em>precisión de tiro matemático</em> 🎯
+            </li>
+        </ol>
+    </div>
+
+    <!-- CONSEJOS -->
+    <div class="pixel-box section purple">
+        <div class="section-title">
+            <span class="icon">💡</span>
+            CONSEJOS DE EL PROFE CAUSIL
+            <span class="line"></span>
+        </div>
+        <div class="tips-grid">
+            <div class="tip">
+                <strong>⚠ No te apresures:</strong> Lee detenidamente si te están preguntando
+                por la <em>Base</em>, el <em>Exponente</em> o la <em>Potencia</em>.
+                ¡Un error de lectura puede costarte un corazón! 💔
+            </div>
+            <div class="tip">
+                <strong>📖 Repasa el Manual de la Academia:</strong> Si tu reactor explota,
+                no te preocupes. Haz clic en <em>"Repasar Conceptos"</em> para abrir el libro
+                de comandos de la nave y estudiar los ejemplos con calma antes de tu siguiente despegue.
+            </div>
+            <div class="sound-tip">
+                <span class="icon">🔊</span>
+                <span>
+                    <strong>Sonido 8-bits:</strong> Juega con el volumen de tu dispositivo activo.
+                    El juego incluye efectos de sonido retro sintetizados en tiempo real para avisarte
+                    cuando logras un nivel (<em>"¡Ding!"</em>) o cuando recibes daño (<em>"¡Oof!"</em>).
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h3>🌟 ¡ACTIVA TU PORTAL CÓSMICO AHORA!</h3>
+        <p style="color: #8ab4d4; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.7;">
+            Desafía a tus compañeros y descubre quién logra recolectar
+            los <strong style="color: var(--neon-yellow);">10 núcleos estables</strong>
+            con un <strong style="color: var(--neon-green);">100% de precisión</strong>.
+        </p>
+        <a href="https://jaidercausil.github.io/desafio_minecraft_potencias/" target="_blank" class="cta-btn">
+            ▶ INICIAR MISIÓN
+        </a>
+        <p class="cta-note">
+            ¡Que la fuerza matemática los acompañe, tripulantes! 🚀
+        </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>
+            <strong>🏫 I.E. Escuela Normal Superior del Bajo Cauca</strong><br>
+            Caucasia, Antioquia, Colombia<br>
+            <strong>👨‍🏫 El Profe Causil</strong> — Área de Matemáticas
+        </p>
+        <p class="pixel-sig">// MATEMÁTICAS PARA LA VIDA //</p>
+    </div>
+
+</div>
+</body>
+</html>
