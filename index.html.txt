@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Espacial: Crafting de Potencias</title>
+    <!-- Tailwind CSS para el diseño premium -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts con estilo Pixel y de Lectura Cómoda -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- KaTeX para visualización matemática impecable -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        .font-pixel {
+            font-family: 'Press Start 2P', monospace;
+        }
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Estilo de Bloque de Minecraft */
+        .mc-border {
+            border: 4px solid #1e1e1e;
+            box-shadow: inset -4px -4px 0px #4a4a4a, inset 4px 4px 0px #e0e0e0;
+        }
+        .mc-button-gray {
+            background-color: #7f7f7f;
+            border: 4px solid #1e1e1e;
+            box-shadow: inset -4px -4px 0px #555555, inset 4px 4px 0px #aaaaaa;
+            image-rendering: pixelated;
+        }
+        .mc-button-gray:hover {
+            background-color: #b2b2b2;
+            box-shadow: inset -4px -4px 0px #7f7f7f, inset 4px 4px 0px #dddddd;
+        }
+        .mc-button-green {
+            background-color: #5c8e32;
+            border: 4px solid #1e1e1e;
+            box-shadow: inset -4px -4px 0px #3c5e21, inset 4px 4px 0px #97cb68;
+        }
+        .mc-button-green:hover {
+            background-color: #4c7529;
+            box-shadow: inset -4px -4px 0px #2f4919, inset 4px 4px 0px #82b254;
+        }
+        /* Estrellas de Fondo Cósmico */
+        body {
+            background-color: #0b0e14;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: backgroundMove 120s linear infinite;
+        }
+        @keyframes backgroundMove {
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 550px, 390px 410px, 380px 820px; }
+        }
+        /* Animación de flotado para planetas */
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Pixel-art custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555555;
+            border: 3px solid #1e1e1e;
+        }
+    </style>
+</head>
+<body class="font-sans-custom text-white min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
+
+    <div class="w-full max-w-2xl bg-[#2e3033] mc-border rounded-lg overflow-hidden relative shadow-2xl">
+        <!-- Encabezado de la nave -->
+        <div class="bg-[#1a1c1e] px-4 py-3 border-b-4 border-[#1e1e1e] flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <!-- Icono de Redstone Pixelado -->
+                <svg class="w-6 h-6 text-red-500" viewBox="0 0 16 16" fill="currentColor">
+                    <rect x="6" y="2" width="4" height="4" />
+                    <rect x="2" y="6" width="4" height="4" />
+                    <rect x="10" y="6" width="4" height="4" />
+                    <rect x="6" y="10" width="4" height="4" />
+                    <rect x="6" y="6" width="4" height="4" fill="#ff4d4d"/>
+                </svg>
+                <span class="font-pixel text-[10px] md:text-xs text-[#ff4d4d] tracking-widest">REDSTONE ENERGY LINK</span>
+            </div>
+            <div class="flex items-center gap-1 bg-[#111] px-3 py-1 rounded border border-gray-700">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-[10px] font-pixel text-gray-400">PORTAL COMPATIBLE</span>
+            </div>
+        </div>
+
+        <!-- PANTALLA 1: BIENVENIDA & REGISTRO -->
+        <div id="screen-welcome" class="p-6 md:p-8 space-y-6">
+            <div class="text-center space-y-4">
+                <div class="flex justify-center mb-2">
+                    <!-- Cohete Minecraft Pixelado -->
+                    <svg class="w-24 h-24 text-blue-400 floating" viewBox="0 0 64 64" fill="currentColor">
+                        <rect x="28" y="8" width="8" height="4" fill="#f43f5e"/>
+                        <rect x="24" y="12" width="16" height="4" fill="#cbd5e1"/>
+                        <rect x="24" y="16" width="16" height="16" fill="#f1f5f9"/>
+                        <rect x="28" y="20" width="8" height="8" fill="#38bdf8"/>
+                        <rect x="24" y="32" width="16" height="12" fill="#cbd5e1"/>
+                        <rect x="16" y="36" width="8" height="16" fill="#f43f5e"/>
+                        <rect x="40" y="36" width="8" height="16" fill="#f43f5e"/>
+                        <rect x="28" y="44" width="8" height="8" fill="#f59e0b"/>
+                        <rect x="30" y="52" width="4" height="4" fill="#ef4444"/>
+                    </svg>
+                </div>
+                <h1 class="font-pixel text-lg md:text-xl text-yellow-400 leading-relaxed uppercase">Potenciación Cósmica</h1>
+                <p class="text-sm md:text-base text-gray-300">¡Tu nave se ha quedado sin combustible en la órbita de Endor! Resuelve los misterios del Reactor de Potencias para activar el portal hiperespacial.</p>
+            </div>
+
+            <!-- Caja de Selección de Personaje -->
+            <div class="bg-[#1f2022] p-4 rounded-lg border-2 border-[#1e1e1e]">
+                <h3 class="font-pixel text-[11px] text-blue-300 mb-3 text-center">SELECCIONA TU TRIPULANTE</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="selectAvatar('Steve Astronauta', 'steve')" id="btn-avatar-steve" class="p-2 bg-[#2d2e30] border-4 border-yellow-400 rounded flex flex-col items-center gap-2 transition hover:scale-105">
+                        <div class="w-12 h-12 bg-[#8cbf3f] rounded relative flex items-center justify-center overflow-hidden border border-black">
+                            <!-- Steve Face Representation -->
+                            <div class="w-8 h-8 bg-[#bd825a] relative">
+                                <div class="absolute top-0 left-0 w-8 h-3 bg-[#442b15]"></div> <!-- Cabello -->
+                                <div class="absolute top-3 left-1 w-2 h-1 bg-[#283895]"></div> <!-- Ojo Izq -->
+                                <div class="absolute top-3 right-1 w-2 h-1 bg-[#283895]"></div> <!-- Ojo Der -->
+                                <div class="absolute bottom-1 left-2 w-4 h-2 bg-[#752a20]"></div> <!-- Boca -->
+                            </div>
+                        </div>
+                        <span class="font-pixel text-[8px] text-white">STEVE-ASTRON</span>
+                    </button>
+                    <button onclick="selectAvatar('Alex Exploradora', 'alex')" id="btn-avatar-alex" class="p-2 bg-[#2d2e30] border-4 border-transparent rounded flex flex-col items-center gap-2 transition hover:scale-105">
+                        <div class="w-12 h-12 bg-[#fca5a5] rounded relative flex items-center justify-center overflow-hidden border border-black">
+                            <!-- Alex Face Representation -->
+                            <div class="w-8 h-8 bg-[#e8a37f] relative">
+                                <div class="absolute top-0 left-0 w-8 h-3 bg-[#b95727]"></div> <!-- Cabello -->
+                                <div class="absolute top-3 left-1 w-2 h-1 bg-[#478a3e]"></div> <!-- Ojo Izq -->
+                                <div class="absolute top-3 right-1 w-2 h-1 bg-[#478a3e]"></div> <!-- Ojo Der -->
+                                <div class="absolute bottom-1 left-2 w-4 h-2 bg-[#a33b24]"></div> <!-- Boca -->
+                            </div>
+                        </div>
+                        <span class="font-pixel text-[8px] text-white">ALEX-SPACE</span>
+                    </button>
+                    <button onclick="selectAvatar('Enderman Amistoso', 'enderman')" id="btn-avatar-enderman" class="p-2 bg-[#2d2e30] border-4 border-transparent rounded flex flex-col items-center gap-2 transition hover:scale-105">
+                        <div class="w-12 h-12 bg-[#18181b] rounded relative flex items-center justify-center overflow-hidden border border-black">
+                            <!-- Enderman Face Representation -->
+                            <div class="w-8 h-8 bg-[#18181b] relative">
+                                <div class="absolute top-3 left-1 w-2 h-1.5 bg-[#f472b6]"></div> <!-- Ojo Izq -->
+                                <div class="absolute top-3 right-1 w-2 h-1.5 bg-[#f472b6]"></div> <!-- Ojo Der -->
+                                <div class="absolute top-3.5 left-1.5 w-1 h-0.5 bg-white"></div> <!-- Brillo -->
+                                <div class="absolute top-3.5 right-1.5 w-1 h-0.5 bg-white"></div> <!-- Brillo -->
+                            </div>
+                        </div>
+                        <span class="font-pixel text-[8px] text-white">ENDER-BOT</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Entrada de Nombre -->
+            <div class="space-y-2">
+                <label class="font-pixel text-[10px] text-gray-400 block">ID DEL TRIPULANTE:</label>
+                <input type="text" id="player-name" placeholder="Escribe tu nick de juego..." 
+                       class="w-full px-4 py-3 bg-[#111] border-2 border-[#1e1e1e] rounded text-white font-mono placeholder-gray-600 focus:outline-none focus:border-blue-500">
+            </div>
+
+            <button onclick="initGame()" class="w-full py-4 mc-button-green font-pixel text-sm tracking-wider text-white">
+                INICIAR DESPEGUE
+            </button>
+        </div>
+
+        <!-- PANTALLA 2: JUEGO ACTIVO -->
+        <div id="screen-game" class="p-6 md:p-8 space-y-6 hidden">
+            <!-- Barra superior del jugador -->
+            <div class="flex flex-wrap justify-between items-center gap-4 bg-[#1a1c1e] p-3 rounded border-2 border-black">
+                <div class="flex items-center gap-3">
+                    <!-- Mini Avatar dinámico -->
+                    <div id="mini-avatar-container" class="w-10 h-10 rounded border border-gray-600 overflow-hidden flex items-center justify-center bg-zinc-800"></div>
+                    <div>
+                        <div id="hud-name" class="font-pixel text-[10px] text-yellow-400">STEVE</div>
+                        <div class="font-pixel text-[8px] text-blue-300">Rango: Recluta Cósmico</div>
+                    </div>
+                </div>
+
+                <!-- Corazones de vida (Minecraft style) -->
+                <div class="flex items-center gap-1 bg-[#222] px-3 py-1.5 rounded border border-gray-800">
+                    <span class="font-pixel text-[8px] text-gray-400 mr-2">VIDAS:</span>
+                    <div id="hearts-container" class="flex gap-1">
+                        <!-- Generado dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Combustible (Progreso para ganar) -->
+            <div class="space-y-1.5">
+                <div class="flex justify-between text-[10px] font-pixel text-red-400">
+                    <span>CARGA DE REDSTONE: <span id="combustible-porcentaje">0</span>%</span>
+                    <span><span id="score-val">0</span>/10 NÚCLEOS</span>
+                </div>
+                <div class="w-full h-5 bg-black rounded p-0.5 border-2 border-[#444]">
+                    <div id="combustible-bar" class="h-full bg-gradient-to-r from-red-600 via-orange-500 to-red-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Panel de Desafío Metálico -->
+            <div class="bg-[#1f2022] border-4 border-black rounded-lg p-5 space-y-4 relative overflow-hidden">
+                <!-- Luz indicadora -->
+                <div class="absolute top-2 right-2 flex items-center gap-1.5">
+                    <div class="font-pixel text-[8px] text-gray-500">REACTOR ACTIVO</div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></div>
+                </div>
+
+                <!-- Información conceptual de ayuda rápida (Flotante o sutil) -->
+                <div class="bg-[#2a2c2f] p-2 rounded text-[11px] text-gray-300 border border-gray-700">
+                    <span class="font-pixel text-[8px] text-yellow-400 block mb-1">CRAFTING MANUAL:</span>
+                    En la expresión <span id="help-formula-container"></span>, <strong class="text-green-400">Base</strong> es la base que se multiplica, <strong class="text-blue-400">Exponente</strong> es el número de veces y <strong class="text-purple-400">Potencia</strong> es el resultado.
+                </div>
+
+                <!-- Enunciado de la pregunta -->
+                <div class="text-center py-4 space-y-4">
+                    <div id="question-text" class="text-sm md:text-base font-pixel text-white leading-relaxed">
+                        <!-- Cargando pregunta -->
+                    </div>
+                    <!-- Contenedor para renderizar la fórmula matemática con KaTeX -->
+                    <div id="math-display" class="text-3xl md:text-4xl py-2 font-mono tracking-wide text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+                        <!-- KaTeX Formula -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caja de Respuestas de Selección Múltiple -->
+            <div class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="options-container">
+                    <!-- Botones de opción inyectados -->
+                </div>
+            </div>
+
+            <!-- Feedback temporal de acierto/error integrado -->
+            <div id="feedback-alert" class="hidden p-3 rounded-lg text-center font-pixel text-[11px] border-2 transition-all">
+                <!-- Mensaje -->
+            </div>
+        </div>
+
+        <!-- PANTALLA 3: RESULTADOS (FIN DEL JUEGO / VICTORIA O DERROTA) -->
+        <div id="screen-results" class="p-6 md:p-8 space-y-6 hidden">
+            <div class="text-center space-y-4">
+                <div class="flex justify-center">
+                    <!-- Trofeo o Portal Apagado según resultado -->
+                    <div id="result-icon-container" class="floating"></div>
+                </div>
+                
+                <h2 id="result-status-title" class="font-pixel text-lg md:text-xl uppercase text-yellow-400">¡MISIÓN FINALIZADA!</h2>
+                
+                <p id="result-description" class="text-sm md:text-base text-gray-300 max-w-md mx-auto">
+                    <!-- Descripción personalizada -->
+                </p>
+
+                <!-- Tarjeta de Estadísticas de Crafting -->
+                <div class="bg-[#1a1c1e] p-4 rounded-lg border-2 border-[#1e1e1e] max-w-xs mx-auto text-left space-y-2">
+                    <h4 class="font-pixel text-[9px] text-gray-400 border-b border-gray-800 pb-1.5 text-center">HOJA DE INVENTARIO</h4>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-gray-400">Astronauta:</span>
+                        <span id="stat-name" class="font-bold text-yellow-400">Steve</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-gray-400">Redstone recolectado:</span>
+                        <span id="stat-score" class="font-bold text-green-400">0 / 10</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-gray-400">Precisión:</span>
+                        <span id="stat-precision" class="font-bold text-blue-400">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
+                <button onclick="playAgain()" class="py-3.5 mc-button-gray font-pixel text-xs text-white">
+                    NUEVO VIAJE
+                </button>
+                <button onclick="showInstructions()" class="py-3.5 bg-blue-700 border-4 border-black rounded text-xs font-pixel text-white hover:bg-blue-800">
+                    REPASAR CONCEPTOS
+                </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA ADICIONAL: REPASAR CONCEPTOS -->
+        <div id="screen-instructions" class="p-6 md:p-8 space-y-6 hidden">
+            <h2 class="font-pixel text-sm md:text-base text-cyan-400 uppercase text-center">Manual de la Academia de Potenciación</h2>
+            
+            <div class="space-y-4 max-h-[350px] overflow-y-auto pr-2 text-sm text-gray-300">
+                <div class="bg-[#1a1c1e] p-3 rounded border border-gray-700">
+                    <h3 class="font-pixel text-[11px] text-yellow-400 mb-2">1. Los Componentes Básicos</h3>
+                    <p class="mb-2">En la expresión matemática $2^3 = 8$:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-xs">
+                        <li><strong>Base (2):</strong> Es el número que se multiplica por sí mismo.</li>
+                        <li><strong>Exponente (3):</strong> Es la cantidad de veces que se multiplica la base.</li>
+                        <li><strong>Potencia (8):</strong> Es el resultado total del cálculo.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-[#1a1c1e] p-3 rounded border border-gray-700">
+                    <h3 class="font-pixel text-[11px] text-yellow-400 mb-2">2. El Cálculo del Exponente</h3>
+                    <p class="text-xs">Si desconoces el exponente en $3^x = 81$, debes preguntarte: <em>"¿Cuántas veces debo multiplicar la base 3 para llegar a 81?"</em></p>
+                    <p class="text-xs text-cyan-400 mt-1">$3 \cdot 3 \cdot 3 \cdot 3 = 81$, por lo tanto $x = 4$.</p>
+                </div>
+
+                <div class="bg-[#1a1c1e] p-3 rounded border border-gray-700">
+                    <h3 class="font-pixel text-[11px] text-yellow-400 mb-2">3. El Cálculo de la Base</h3>
+                    <p class="text-xs">Si desconoces la base en $x^2 = 25$, buscas un número que multiplicado 2 veces dé 25:</p>
+                    <p class="text-xs text-cyan-400 mt-1">$5 \cdot 5 = 25$, por lo tanto la base $x = 5$.</p>
+                </div>
+            </div>
+
+            <button onclick="backToResults()" class="w-full py-4 mc-button-gray font-pixel text-xs text-white">
+                VOLVER A LA NAVE
+            </button>
+        </div>
+    </div>
+
+    <!-- AUDIO SINTETIZADOR CON WEB AUDIO API (Totalmente self-contained) -->
+    <script>
+        // Inicializar contexto de audio de manera perezosa tras el primer click del usuario para evitar bloqueos del navegador
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Sintetizador de tonos retro/arcade de 8 bits
+        function playRetroSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                // Sonido corto de UI (Minecraft-like click)
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.1);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'correct') {
+                // Ding de nivel brillante de Minecraft
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // Nota C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // Nota E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // Nota G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.24); // Nota C6
+                
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'incorrect') {
+                // Sonido de golpe "Oof" o daño de Minecraft
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.linearRampToValueAtTime(60, now + 0.25);
+                
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'victory') {
+                // Fanfarria triunfal corta
+                osc.type = 'square';
+                const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 523.25];
+                const durations = [0.1, 0.1, 0.1, 0.15, 0.1, 0.4];
+                let currentStart = now;
+
+                notes.forEach((freq, idx) => {
+                    const localOsc = audioCtx.createOscillator();
+                    const localGain = audioCtx.createGain();
+                    localOsc.type = 'triangle';
+                    localOsc.frequency.value = freq;
+                    localOsc.connect(localGain);
+                    localGain.connect(audioCtx.destination);
+                    
+                    localGain.gain.setValueAtTime(0.15, currentStart);
+                    localGain.gain.exponentialRampToValueAtTime(0.01, currentStart + durations[idx]);
+                    
+                    localOsc.start(currentStart);
+                    localOsc.stop(currentStart + durations[idx]);
+                    currentStart += durations[idx] - 0.02;
+                });
+            } else if (type === 'gameover') {
+                // Melodia triste descendente
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(120, now + 0.2);
+                osc.frequency.linearRampToValueAtTime(90, now + 0.5);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            }
+        }
+    </script>
+
+    <!-- CONTROLADORES DEL JUEGO -->
+    <script>
+        // Datos e inicializaciones de variables del juego
+        let selectedAvatarId = 'steve';
+        let selectedAvatarName = 'Steve Astronauta';
+        let playerName = '';
+        let score = 0;
+        let lives = 3;
+        let totalAttempts = 0;
+        let activeQuestion = null;
+
+        // Diccionario de avatares SVG
+        const avatars = {
+            steve: `
+                <div class="w-8 h-8 bg-[#bd825a] relative">
+                    <div class="absolute top-0 left-0 w-8 h-3 bg-[#442b15]"></div>
+                    <div class="absolute top-3 left-1 w-2 h-1 bg-[#283895]"></div>
+                    <div class="absolute top-3 right-1 w-2 h-1 bg-[#283895]"></div>
+                    <div class="absolute bottom-1 left-2 w-4 h-2 bg-[#752a20]"></div>
+                </div>`,
+            alex: `
+                <div class="w-8 h-8 bg-[#e8a37f] relative">
+                    <div class="absolute top-0 left-0 w-8 h-3 bg-[#b95727]"></div>
+                    <div class="absolute top-3 left-1 w-2 h-1 bg-[#478a3e]"></div>
+                    <div class="absolute top-3 right-1 w-2 h-1 bg-[#478a3e]"></div>
+                    <div class="absolute bottom-1 left-2 w-4 h-2 bg-[#a33b24]"></div>
+                </div>`,
+            enderman: `
+                <div class="w-8 h-8 bg-[#18181b] relative">
+                    <div class="absolute top-3 left-1 w-2 h-1.5 bg-[#f472b6]"></div>
+                    <div class="absolute top-3 right-1 w-2 h-1.5 bg-[#f472b6]"></div>
+                </div>`
+        };
+
+        // Renderizar la fórmula introductoria de ayuda con KaTeX estáticamente
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById("help-formula-container");
+            if (container && window.katex) {
+                katex.render("b^e = p", container, { throwOnError: false });
+            }
+        });
+
+        function selectAvatar(name, key) {
+            playRetroSound('click');
+            selectedAvatarId = key;
+            selectedAvatarName = name;
+            
+            // Actualizar apariencia visual de selección
+            ['steve', 'alex', 'enderman'].forEach(avatar => {
+                const btn = document.getElementById(`btn-avatar-${avatar}`);
+                if (avatar === key) {
+                    btn.classList.remove('border-transparent');
+                    btn.classList.add('border-yellow-400');
+                } else {
+                    btn.classList.remove('border-yellow-400');
+                    btn.classList.add('border-transparent');
+                }
+            });
+        }
+
+        function initGame() {
+            playRetroSound('click');
+            playerName = document.getElementById("player-name").value.trim();
+            if (!playerName) {
+                playerName = "SteveAstronaut";
+            }
+
+            // Preparar HUD
+            document.getElementById("hud-name").textContent = playerName.toUpperCase();
+            document.getElementById("mini-avatar-container").innerHTML = avatars[selectedAvatarId];
+
+            // Reset de puntuaciones y estado
+            score = 0;
+            lives = 3;
+            totalAttempts = 0;
+
+            // Cambiar pantallas
+            document.getElementById("screen-welcome").classList.add("hidden");
+            document.getElementById("screen-game").classList.remove("hidden");
+
+            updateHUD();
+            nextChallenge();
+        }
+
+        function updateHUD() {
+            document.getElementById("score-val").textContent = score;
+            const percentage = Math.min((score / 10) * 100, 100);
+            document.getElementById("combustible-porcentaje").textContent = Math.round(percentage);
+            document.getElementById("combustible-bar").style.width = `${percentage}%`;
+
+            // Renderizar corazones de vida de Minecraft (SVG)
+            const heartsContainer = document.getElementById("hearts-container");
+            heartsContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const isFull = i < lives;
+                const heartColor = isFull ? '#ff2222' : '#3f3f3f';
+                const shadowColor = isFull ? '#990000' : '#1f1f1f';
+                heartsContainer.innerHTML += `
+                    <svg class="w-6 h-6 transition-all duration-300" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 3 H6 V5 H10 V3 H14 V7 H12 V9 H10 V11 H8 V9 H6 V7 H2 Z" fill="${heartColor}"/>
+                        <path d="M4 3 H6 V5 H5 Z" fill="#ffffff" opacity="0.4"/>
+                        <path d="M2 7 H4 V9 H2 Z" fill="${shadowColor}" opacity="0.6"/>
+                    </svg>
+                `;
+            }
+        }
+
+        // Generador inteligente de preguntas sobre conceptos de potenciación
+        function generateConceptQuestion() {
+            // Tipos de pregunta:
+            // 0: Identificar base
+            // 1: Identificar exponente
+            // 2: Identificar potencia (el resultado)
+            // 3: Calcular la potencia dados base y exponente
+            // 4: Calcular exponente dada base y potencia
+            // 5: Calcular base dada potencia y exponente
+            const type = Math.floor(Math.random() * 6);
+            
+            // Bases y exponentes pequeños para cálculo mental rápido, retador pero justo
+            const pairs = [
+                {b: 2, e: 3, p: 8},
+                {b: 2, e: 4, p: 16},
+                {b: 2, e: 5, p: 32},
+                {b: 3, e: 2, p: 9},
+                {b: 3, e: 3, p: 27},
+                {b: 4, e: 2, p: 16},
+                {b: 4, e: 3, p: 64},
+                {b: 5, e: 2, p: 25},
+                {b: 5, e: 3, p: 125},
+                {b: 6, e: 2, p: 36},
+                {b: 7, e: 2, p: 49},
+                {b: 8, e: 2, p: 64},
+                {b: 9, e: 2, p: 81},
+                {b: 10, e: 2, p: 100},
+                {b: 10, e: 3, p: 1000}
+            ];
+
+            const selectedPair = pairs[Math.floor(Math.random() * pairs.length)];
+            const {b, e, p} = selectedPair;
+
+            let questionText = "";
+            let mathString = "";
+            let correctAnswer = "";
+            let options = [];
+
+            switch(type) {
+                case 0: // Identificar base
+                    questionText = "En la siguiente expresión de potenciación, ¿cuál de los componentes es la <span class='text-green-400 font-bold'>BASE</span>?";
+                    mathString = `${b}^{${e}} = ${p}`;
+                    correctAnswer = `${b}`;
+                    options = [correctAnswer, `${e}`, `${p}`, `${b * e}`];
+                    break;
+                case 1: // Identificar exponente
+                    questionText = "En la siguiente ecuación cósmica, ¿cuál de los elementos corresponde al <span class='text-blue-400 font-bold'>EXPONENTE</span>?";
+                    mathString = `${b}^{${e}} = ${p}`;
+                    correctAnswer = `${e}`;
+                    options = [correctAnswer, `${b}`, `${p}`, `${b + e}`];
+                    break;
+                case 2: // Identificar potencia
+                    questionText = "En esta operación espacial, ¿cuál de los términos numéricos representa la <span class='text-purple-400 font-bold'>POTENCIA</span>?";
+                    mathString = `${b}^{${e}} = ${p}`;
+                    correctAnswer = `${p}`;
+                    options = [correctAnswer, `${b}`, `${e}`, `${b * e}`];
+                    break;
+                case 3: // Calcular potencia completa
+                    questionText = "Tienes un generador de energía de <span class='text-green-400'>Base</span> " + b + " y un acelerador de <span class='text-blue-400'>Exponente</span> " + e + ". ¿Cuánta <span class='text-purple-400'>Potencia</span> total produce?";
+                    mathString = `${b}^{${e}} = x`;
+                    correctAnswer = `${p}`;
+                    options = [correctAnswer, `${b * e}`, `${p + 4}`, `${p - b}`];
+                    break;
+                case 4: // Hallar exponente
+                    questionText = "Si el reactor espacial tiene una <span class='text-green-400'>Base</span> de " + b + " y produce una <span class='text-purple-400'>Potencia</span> de " + p + ", ¿cuál debe ser el <span class='text-blue-400'>Exponente</span>?";
+                    mathString = `${b}^{x} = ${p}`;
+                    correctAnswer = `${e}`;
+                    options = [correctAnswer, `${e + 1}`, `${Math.round(p/b)}`, `${e - 1}`];
+                    break;
+                case 5: // Hallar base
+                    questionText = "Un núcleo solar tiene un <span class='text-blue-400'>Exponente</span> de " + e + " y produce una <span class='text-purple-400'>Potencia</span> total de " + p + ". ¿Cuál es su <span class='text-green-400'>Base</span>?";
+                    mathString = `x^{${e}} = ${p}`;
+                    correctAnswer = `${b}`;
+                    options = [correctAnswer, `${b + 2}`, `${Math.round(p/e)}`, `${b - 1}`];
+                    break;
+            }
+
+            // Sanitizar opciones duplicadas o vacías que puedan ocurrir debido a fórmulas matemáticas
+            options = [...new Set(options)].filter(opt => opt !== "");
+            // Si por casualidad quedamos con menos de 4 opciones, inyectar aleatorios
+            while (options.length < 4) {
+                const randomVal = Math.floor(Math.random() * 20) + 1;
+                if (!options.includes(`${randomVal}`)) {
+                    options.push(`${randomVal}`);
+                }
+            }
+
+            // Mezclar opciones
+            options = options.sort(() => Math.random() - 0.5);
+
+            return {
+                questionText,
+                mathString,
+                correctAnswer,
+                options
+            };
+        }
+
+        function nextChallenge() {
+            // Comprobar si ya ganó
+            if (score >= 10) {
+                endGame(true);
+                return;
+            }
+
+            // Limpiar feedback anterior
+            const fb = document.getElementById("feedback-alert");
+            fb.classList.add("hidden");
+
+            activeQuestion = generateConceptQuestion();
+
+            // Renderizar pregunta e inicializar KaTeX en el contenedor correspondiente
+            document.getElementById("question-text").innerHTML = activeQuestion.questionText;
+            
+            // Renderizar la fórmula principal con KaTeX de forma dinámica y controlada
+            if (window.katex) {
+                katex.render(activeQuestion.mathString, document.getElementById("math-display"), {
+                    throwOnError: false,
+                    displayMode: true
+                });
+            } else {
+                document.getElementById("math-display").textContent = activeQuestion.mathString;
+            }
+
+            // Renderizar las opciones como botones de Minecraft
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+            activeQuestion.options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.className = "w-full py-4 text-sm font-pixel text-white mc-button-gray tracking-wide flex items-center justify-center gap-2 transition duration-150 transform active:scale-95";
+                btn.innerHTML = `<span class="bg-[#111] text-yellow-400 px-2.5 py-1 text-[10px] rounded border border-gray-600 block shadow-inner">${option}</span> Seleccionar`;
+                btn.onclick = () => selectOption(option);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedVal) {
+            totalAttempts++;
+            const fb = document.getElementById("feedback-alert");
+            fb.classList.remove("hidden", "bg-green-900/80", "border-green-500", "text-green-300", "bg-red-900/80", "border-red-500", "text-red-300");
+
+            if (selectedVal === activeQuestion.correctAnswer) {
+                // Correcto
+                playRetroSound('correct');
+                score++;
+                fb.classList.add("bg-green-900/80", "border-green-500", "text-green-300");
+                fb.innerHTML = `¡SÍ! Núcleo procesado correctamente. ¡Energía Redstone en aumento!`;
+                
+                // Deshabilitar botones para evitar multi-clicks de trampas
+                const btns = document.getElementById("options-container").getElementsByTagName("button");
+                for (let button of btns) {
+                    button.disabled = true;
+                    button.style.opacity = "0.5";
+                }
+
+                updateHUD();
+                setTimeout(nextChallenge, 1500);
+            } else {
+                // Incorrecto
+                playRetroSound('incorrect');
+                lives--;
+                fb.classList.add("bg-red-900/80", "border-red-500", "text-red-300");
+                fb.innerHTML = `¡BOOM! El reactor se sobrecalentó. La respuesta correcta era: <strong>${activeQuestion.correctAnswer}</strong>.`;
+                
+                const btns = document.getElementById("options-container").getElementsByTagName("button");
+                for (let button of btns) {
+                    button.disabled = true;
+                    button.style.opacity = "0.5";
+                }
+
+                updateHUD();
+                
+                if (lives <= 0) {
+                    setTimeout(() => endGame(false), 1500);
+                } else {
+                    setTimeout(nextChallenge, 2200);
+                }
+            }
+        }
+
+        function endGame(isVictory) {
+            document.getElementById("screen-game").classList.add("hidden");
+            document.getElementById("screen-results").classList.remove("hidden");
+
+            const iconContainer = document.getElementById("result-icon-container");
+            const titleElement = document.getElementById("result-status-title");
+            const descElement = document.getElementById("result-description");
+
+            // Estadísticas en la tarjeta
+            document.getElementById("stat-name").textContent = playerName.toUpperCase();
+            document.getElementById("stat-score").textContent = `${score} / 10`;
+            const precisionVal = totalAttempts > 0 ? Math.round((score / totalAttempts) * 100) : 0;
+            document.getElementById("stat-precision").textContent = `${precisionVal}%`;
+
+            if (isVictory) {
+                playRetroSound('victory');
+                titleElement.textContent = "¡MISIÓN COMPLETADA CON ÉXITO!";
+                titleElement.className = "font-pixel text-lg md:text-xl uppercase text-green-400 tracking-wider";
+                
+                // Portal encendido / Portal Espacial de Minecraft (SVG)
+                iconContainer.innerHTML = `
+                    <svg class="w-28 h-28 text-purple-500" viewBox="0 0 64 64" fill="currentColor">
+                        <rect x="16" y="8" width="32" height="48" fill="#180828" stroke="#111" stroke-width="4"/>
+                        <!-- Partículas del Portal -->
+                        <rect x="24" y="16" width="4" height="4" fill="#d946ef" class="animate-ping"/>
+                        <rect x="36" y="28" width="4" height="4" fill="#a855f7" class="animate-bounce" style="animation-delay: 0.5s"/>
+                        <rect x="20" y="40" width="4" height="4" fill="#c084fc" class="animate-pulse" style="animation-delay: 1s"/>
+                        <!-- Portal Arcos exteriores -->
+                        <rect x="12" y="8" width="8" height="48" fill="#3c096c"/>
+                        <rect x="44" y="8" width="8" height="48" fill="#3c096c"/>
+                        <rect x="12" y="4" width="40" height="8" fill="#240046"/>
+                        <rect x="12" y="52" width="40" height="8" fill="#240046"/>
+                    </svg>
+                `;
+                descElement.innerHTML = `¡Increíble, <strong>${playerName}</strong>! Has acumulado 10 núcleos estables de potencia. El portal hiperespacial se ha activado y estás listo para regresar a casa. ¡Eres un maestro indiscutible de las potencias!`;
+            } else {
+                playRetroSound('gameover');
+                titleElement.textContent = "¡REACTOR DESTRUIDO!";
+                titleElement.className = "font-pixel text-lg md:text-xl uppercase text-red-500 tracking-wider";
+
+                // Calavera Minecraft / Reactor explotado (SVG)
+                iconContainer.innerHTML = `
+                    <svg class="w-28 h-28 text-gray-500" viewBox="0 0 64 64" fill="currentColor">
+                        <rect x="16" y="16" width="32" height="32" fill="#d4d4d8" stroke="#1e1e1e" stroke-width="4"/>
+                        <!-- Ojos negros del esqueleto de minecraft -->
+                        <rect x="22" y="24" width="6" height="6" fill="#18181b"/>
+                        <rect x="36" y="24" width="6" height="6" fill="#18181b"/>
+                        <!-- Nariz -->
+                        <rect x="30" y="32" width="4" height="4" fill="#18181b"/>
+                        <!-- Boca de bloque -->
+                        <rect x="22" y="38" width="20" height="4" fill="#18181b"/>
+                        <rect x="22" y="34" width="4" height="4" fill="#18181b"/>
+                        <rect x="38" y="34" width="4" height="4" fill="#18181b"/>
+                    </svg>
+                `;
+                descElement.innerHTML = `Lamentablemente te has quedado sin corazones de energía, <strong>${playerName}</strong>. Tu nave quedó varada a medio camino en la galaxia. ¡No te rindas y vuelve a intentarlo para refinar tus habilidades!`;
+            }
+        }
+
+        function playAgain() {
+            playRetroSound('click');
+            document.getElementById("screen-results").classList.add("hidden");
+            document.getElementById("screen-welcome").classList.remove("hidden");
+            document.getElementById("player-name").value = "";
+        }
+
+        function showInstructions() {
+            playRetroSound('click');
+            document.getElementById("screen-results").classList.add("hidden");
+            document.getElementById("screen-instructions").classList.remove("hidden");
+            
+            // Re-renderizar expresiones LaTeX dentro del manual
+            setTimeout(() => {
+                if (window.katex) {
+                    // Renderizar automáticamente elementos en el manual
+                    const elements = document.getElementById("screen-instructions").querySelectorAll("p, li, span");
+                    elements.forEach(el => {
+                        // Buscar patrones en línea para renderizarlos de forma segura con KaTeX sin dañar el HTML
+                        if (el.innerHTML.includes('$')) {
+                            const raw = el.innerHTML;
+                            const formatted = raw.replace(/\$([^\$]+)\$/g, (match, formula) => {
+                                try {
+                                    return katex.renderToString(formula, { throwOnError: false });
+                                } catch(e) {
+                                    return match;
+                                }
+                            });
+                            el.innerHTML = formatted;
+                        }
+                    });
+                }
+            }, 50);
+        }
+
+        function backToResults() {
+            playRetroSound('click');
+            document.getElementById("screen-instructions").classList.add("hidden");
+            document.getElementById("screen-results").classList.remove("hidden");
+        }
+    </script>
+
+</body>
+</html>
